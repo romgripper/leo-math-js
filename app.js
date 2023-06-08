@@ -1,8 +1,8 @@
 class UI {
     constructor() {
         this.date = document.getElementById("date");
-        this.operand1 = document.getElementById("operand1");
-        this.operand2 = document.getElementById("operand2");
+        this.maxOperand1 = document.getElementById("max-operand1");
+        this.maxOperand2 = document.getElementById("max-operand2");
         this.count = document.getElementById("count");
         this.selects = document.querySelectorAll("select");
         this.additionButton = document.getElementById("addition");
@@ -16,12 +16,12 @@ class UI {
         M.FormSelect.init(this.selects);
     }
 
-    getOperand1() {
-        return +this.operand1.value;
+    getMaxOperand1() {
+        return +this.maxOperand1.value;
     }
 
-    getOperand2() {
-        return +this.operand2.value;
+    getMaxOperand2() {
+        return +this.maxOperand2.value;
     }
 
     getCount() {
@@ -86,14 +86,29 @@ function init() {
     initMaterialize();
 }
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function generateQuestions(operator, maxOperand1, maxOperand2, count) {
+    const questions = [];
+    console.log(count);
+    for (let i = 0; i < count; i++) {
+        const operand1 = getRandomInt(maxOperand1);
+        const operand2 = getRandomInt(maxOperand2);
+        questions.push(`${operand1} ${operator} ${operand2}`);
+    }
+    console.log("questions", questions);
+    return questions;
+}
+
 function generateAdditions(e) {
     e.preventDefault();
-    const operand1 = ui.getOperand1();
-    const operand2 = ui.getOperand2();
+    const maxOperand1 = ui.getMaxOperand1();
+    const maxOperand2 = ui.getMaxOperand2();
     const questionCount = ui.getCount();
 
-    console.log(operand1, operand2, questionCount);
-    questions = ["1 + 1 ", "1+1", "1+1", "1+1", "1+1"];
+    questions = generateQuestions("+", maxOperand1, maxOperand2, questionCount);
     ui.showQuestions(questions);
 }
 

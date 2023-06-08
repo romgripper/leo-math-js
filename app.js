@@ -59,6 +59,24 @@ class UI {
     disableCheckAnswersButton() {
         this.checkAnswersButton.setAttribute("disabled", "");
     }
+
+    showAlert(message, success) {
+        this.clearAlert();
+        const div = document.createElement("div");
+        div.className = "alert " + (success ? "alert-success" : "alert-danger");
+        div.textContent = message;
+        this.questionsSection.insertBefore(div, this.checkAnswersButton.parentElement);
+        setTimeout(() => {
+            this.clearAlert();
+        }, 3000);
+    }
+
+    clearAlert() {
+        const currentAlert = document.querySelector(".alert");
+        if (currentAlert) {
+            currentAlert.remove();
+        }
+    }
 }
 
 const ui = new UI();
@@ -104,10 +122,10 @@ function checkAnswers() {
     const score = (correctCount / count) * 100;
     console.log(score);
     if (correctCount == count) {
-        alert("You get all answers correct! You Are Awesome!");
+        ui.showAlert("You get all answers correct! You Are Awesome!", true);
         ui.disableCheckAnswersButton();
     } else {
-        alert("You get " + score);
+        ui.showAlert("You get score: " + score + ", please check your answers", false);
     }
 }
 

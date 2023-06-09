@@ -6,6 +6,9 @@ class UI {
         this.count = document.getElementById("count");
         this.selects = document.querySelectorAll("select");
         this.additionButton = document.getElementById("addition");
+        this.subtractionButton = document.getElementById("subtraction");
+        this.multiplicationButton = document.getElementById("multiplication");
+        this.divisionButton = document.getElementById("division");
         this.questionList = document.getElementById("question-list");
         this.questionsSection = document.getElementById("questions");
         this.checkAnswersButton = document.getElementById("check-answers");
@@ -87,28 +90,35 @@ function init() {
 }
 
 function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
+    return Math.ceil(Math.random() * max);
 }
 
 function generateQuestions(operator, maxOperand1, maxOperand2, count) {
     const questions = [];
-    console.log(count);
     for (let i = 0; i < count; i++) {
-        const operand1 = getRandomInt(maxOperand1);
-        const operand2 = getRandomInt(maxOperand2);
+        let operand1 = getRandomInt(maxOperand1);
+        let operand2 = getRandomInt(maxOperand2);
+
+        if (operator == "/") {
+            operand1 = operand1 * operand2;
+        } else if (operator == "-" && operand1 < operand2) {
+            const temp = operand1;
+            operand1 = operand2;
+            operand2 = temp;
+        }
         questions.push(`${operand1} ${operator} ${operand2}`);
     }
-    console.log("questions", questions);
     return questions;
 }
 
-function generateAdditions(e) {
+function generateAndShowQuestions(e, operator) {
     e.preventDefault();
+
     const maxOperand1 = ui.getMaxOperand1();
     const maxOperand2 = ui.getMaxOperand2();
     const questionCount = ui.getCount();
 
-    questions = generateQuestions("+", maxOperand1, maxOperand2, questionCount);
+    questions = generateQuestions(operator, maxOperand1, maxOperand2, questionCount);
     ui.showQuestions(questions);
 }
 
@@ -133,9 +143,7 @@ function checkAnswers() {
         }
     });
 
-    console.log(correctCount, "/", count);
     const score = (correctCount / count) * 100;
-    console.log(score);
     if (correctCount == count) {
         ui.showAlert("You get all answers correct! You Are Awesome!", true);
         ui.disableCheckAnswersButton();
@@ -145,5 +153,8 @@ function checkAnswers() {
 }
 
 document.addEventListener("DOMContentLoaded", () => ui.init());
-ui.additionButton.addEventListener("click", generateAdditions);
+ui.additionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "+"));
+ui.subtractionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "-"));
+ui.multiplicationButton.addEventListener("click", (e) => generateAndShowQuestions(e, "*"));
+ui.divisionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "/"));
 ui.checkAnswersButton.addEventListener("click", checkAnswers);

@@ -2,6 +2,7 @@ class UI {
     constructor() {
         this.date = document.getElementById("date");
         this.maxOperand1 = document.getElementById("max-operand1");
+        this.generatorSection = document.getElementById("generator");
         this.maxOperand2 = document.getElementById("max-operand2");
         this.count = document.getElementById("count");
         this.selects = document.querySelectorAll("select");
@@ -80,6 +81,10 @@ class UI {
             currentAlert.remove();
         }
     }
+
+    hideGeneratorSection() {
+        this.generatorSection.style.display = "none";
+    }
 }
 
 const ui = new UI();
@@ -120,6 +125,7 @@ function generateAndShowQuestions(e, operator) {
 
     questions = generateQuestions(operator, maxOperand1, maxOperand2, questionCount);
     ui.showQuestions(questions);
+    ui.hideGeneratorSection();
 }
 
 function checkAnswers() {

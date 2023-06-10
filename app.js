@@ -49,6 +49,7 @@ class UI {
             html += "</div>";
         }
         this.questionList.innerHTML = html;
+        console.log(html);
         this.questionsSection.style.display = "block";
     }
 

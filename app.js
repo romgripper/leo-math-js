@@ -70,9 +70,11 @@ class UI {
         div.className = "alert " + (success ? "alert-success" : "alert-danger");
         div.textContent = message;
         this.questionsSection.insertBefore(div, this.checkAnswersButton.parentElement);
-        setTimeout(() => {
-            this.clearAlert();
-        }, 3000);
+        if (!success) {
+            setTimeout(() => {
+                this.clearAlert();
+            }, 3000);
+        }
     }
 
     clearAlert() {
@@ -141,10 +143,8 @@ function checkAnswers() {
         const question = questionElement.textContent;
         const expectedAnswer = eval(question);
 
-        if (expectedAnswer != answerElement.value) {
-            answerElement.style.color = "red";
-        } else {
-            answerElement.style.color = "lightseagreen";
+        if (expectedAnswer == answerElement.value) {
+            answerElement.setAttribute("disabled", "");
             correctCount++;
         }
     });

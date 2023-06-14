@@ -49,7 +49,6 @@ class UI {
             html += "</div>";
         }
         this.questionList.innerHTML = html;
-        console.log(html);
         this.questionsSection.style.display = "block";
     }
 
@@ -160,6 +159,7 @@ function checkAnswers() {
 }
 
 document.addEventListener("DOMContentLoaded", () => ui.init());
+
 ui.additionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "+"));
 ui.subtractionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "-"));
 ui.multiplicationButton.addEventListener("click", (e) => generateAndShowQuestions(e, "*"));

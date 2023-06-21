@@ -88,3 +88,5 @@ class UI {
         this.generatorSection.style.display = "none";
     }
 }
+
+export const ui = new UI();

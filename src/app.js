@@ -1,4 +1,4 @@
-const ui = new UI();
+import { ui } from "./ui";
 
 function getRandomInt(max) {
     return Math.ceil(Math.random() * max);
@@ -29,7 +29,7 @@ function generateAndShowQuestions(e, operator) {
     const maxOperand2 = ui.getMaxOperand2();
     const questionCount = ui.getCount();
 
-    questions = generateQuestions(operator, maxOperand1, maxOperand2, questionCount);
+    const questions = generateQuestions(operator, maxOperand1, maxOperand2, questionCount);
     ui.showQuestions(questions);
     ui.hideGeneratorSection();
 }

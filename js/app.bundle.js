@@ -9505,27 +9505,7 @@ module.exports = function (regExp, replace) {
 
 var _ui = __webpack_require__(334);
 
-function getRandomInt(max) {
-    return Math.ceil(Math.random() * max);
-}
-
-function generateQuestions(operator, maxOperand1, maxOperand2, count) {
-    var questions = [];
-    for (var i = 0; i < count; i++) {
-        var operand1 = getRandomInt(maxOperand1);
-        var operand2 = getRandomInt(maxOperand2);
-
-        if (operator == "/") {
-            operand1 = operand1 * operand2;
-        } else if (operator == "-" && operand1 < operand2) {
-            var temp = operand1;
-            operand1 = operand2;
-            operand2 = temp;
-        }
-        questions.push(operand1 + " " + operator + " " + operand2);
-    }
-    return questions;
-}
+var _question = __webpack_require__(335);
 
 function generateAndShowQuestions(e, operator) {
     e.preventDefault();
@@ -9534,7 +9514,7 @@ function generateAndShowQuestions(e, operator) {
     var maxOperand2 = _ui.ui.getMaxOperand2();
     var questionCount = _ui.ui.getCount();
 
-    var questions = generateQuestions(operator, maxOperand1, maxOperand2, questionCount);
+    var questions = _question.question.generate(operator, maxOperand1, maxOperand2, questionCount);
     _ui.ui.showQuestions(questions);
     _ui.ui.hideGeneratorSection();
 }
@@ -9707,6 +9687,56 @@ var UI = function () {
 }();
 
 var ui = exports.ui = new UI();
+
+/***/ }),
+/* 335 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function getRandomInt(max) {
+    return Math.ceil(Math.random() * max);
+}
+
+var Question = function () {
+    function Question() {
+        _classCallCheck(this, Question);
+    }
+
+    _createClass(Question, [{
+        key: "generate",
+        value: function generate(operator, maxOperand1, maxOperand2, count) {
+            var questions = [];
+            for (var i = 0; i < count; i++) {
+                var operand1 = getRandomInt(maxOperand1);
+                var operand2 = getRandomInt(maxOperand2);
+
+                if (operator == "/") {
+                    operand1 = operand1 * operand2;
+                } else if (operator == "-" && operand1 < operand2) {
+                    var temp = operand1;
+                    operand1 = operand2;
+                    operand2 = temp;
+                }
+                questions.push(operand1 + " " + operator + " " + operand2);
+            }
+            return questions;
+        }
+    }]);
+
+    return Question;
+}();
+
+var question = exports.question = new Question();
 
 /***/ })
 /******/ ]);

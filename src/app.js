@@ -1,26 +1,5 @@
 import { ui } from "./ui";
-
-function getRandomInt(max) {
-    return Math.ceil(Math.random() * max);
-}
-
-function generateQuestions(operator, maxOperand1, maxOperand2, count) {
-    const questions = [];
-    for (let i = 0; i < count; i++) {
-        let operand1 = getRandomInt(maxOperand1);
-        let operand2 = getRandomInt(maxOperand2);
-
-        if (operator == "/") {
-            operand1 = operand1 * operand2;
-        } else if (operator == "-" && operand1 < operand2) {
-            const temp = operand1;
-            operand1 = operand2;
-            operand2 = temp;
-        }
-        questions.push(`${operand1} ${operator} ${operand2}`);
-    }
-    return questions;
-}
+import { question } from "./question";
 
 function generateAndShowQuestions(e, operator) {
     e.preventDefault();
@@ -29,7 +8,7 @@ function generateAndShowQuestions(e, operator) {
     const maxOperand2 = ui.getMaxOperand2();
     const questionCount = ui.getCount();
 
-    const questions = generateQuestions(operator, maxOperand1, maxOperand2, questionCount);
+    const questions = question.generate(operator, maxOperand1, maxOperand2, questionCount);
     ui.showQuestions(questions);
     ui.hideGeneratorSection();
 }

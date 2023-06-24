@@ -18,7 +18,7 @@ function checkAllAnswersFilled() {
     for (var i = 0; i < answerElements.length; i++) {
         const input = answerElements[i];
         if (!input.value) {
-            ui.showAlert("Please fill in all the answers first.", false);
+            ui.showAlert("Please answer all the questions first.", false);
             input.focus();
             return false;
         }

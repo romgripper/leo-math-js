@@ -9524,7 +9524,7 @@ function checkAllAnswersFilled() {
     for (var i = 0; i < answerElements.length; i++) {
         var input = answerElements[i];
         if (!input.value) {
-            _ui.ui.showAlert("Please fill in all the answers first.", false);
+            _ui.ui.showAlert("Please answer all the questions first.", false);
             input.focus();
             return false;
         }
@@ -9558,7 +9558,6 @@ function checkAnswers() {
         }
     });
 
-    var score = correctCount / count * 100;
     if (correctCount == count) {
         _ui.ui.showAlert("You get all answers correct! You Are Awesome!", true);
         _ui.ui.disableCheckAnswersButton();

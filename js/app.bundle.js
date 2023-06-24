@@ -9524,7 +9524,7 @@ function checkAllAnswersFilled() {
     for (var i = 0; i < answerElements.length; i++) {
         var input = answerElements[i];
         if (!input.value) {
-            _ui.ui.showAlert("Please fill in all the answers first", false);
+            _ui.ui.showAlert("Please fill in all the answers first.", false);
             input.focus();
             return false;
         }
@@ -9540,6 +9540,7 @@ function checkAnswers() {
     var count = questionElements.length;
 
     var correctCount = 0;
+    var firstWrongAnswer = true;
     questionElements.forEach(function (questionElement) {
         var id = questionElement.id;
         var index = id.substring("question".length);
@@ -9551,6 +9552,9 @@ function checkAnswers() {
         if (expectedAnswer == answerElement.value) {
             answerElement.setAttribute("disabled", "");
             correctCount++;
+        } else if (firstWrongAnswer) {
+            answerElement.focus();
+            firstWrongAnswer = false;
         }
     });
 
@@ -9559,7 +9563,7 @@ function checkAnswers() {
         _ui.ui.showAlert("You get all answers correct! You Are Awesome!", true);
         _ui.ui.disableCheckAnswersButton();
     } else {
-        _ui.ui.showAlert("You get score: " + score + ", please check your answers", false);
+        _ui.ui.showAlert("You get " + correctCount + " of " + count + " answers correct. Please correct the wrong ones.", false);
     }
 }
 

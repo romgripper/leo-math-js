@@ -18,7 +18,7 @@ function checkAllAnswersFilled() {
     for (var i = 0; i < answerElements.length; i++) {
         const input = answerElements[i];
         if (!input.value) {
-            ui.showAlert("Please fill in all the answers first", false);
+            ui.showAlert("Please fill in all the answers first.", false);
             input.focus();
             return false;
         }
@@ -34,6 +34,7 @@ function checkAnswers() {
     const count = questionElements.length;
 
     let correctCount = 0;
+    let firstWrongAnswer = true;
     questionElements.forEach((questionElement) => {
         const id = questionElement.id;
         const index = id.substring("question".length);
@@ -45,15 +46,20 @@ function checkAnswers() {
         if (expectedAnswer == answerElement.value) {
             answerElement.setAttribute("disabled", "");
             correctCount++;
+        } else if (firstWrongAnswer) {
+            answerElement.focus();
+            firstWrongAnswer = false;
         }
     });
 
-    const score = (correctCount / count) * 100;
     if (correctCount == count) {
         ui.showAlert("You get all answers correct! You Are Awesome!", true);
         ui.disableCheckAnswersButton();
     } else {
-        ui.showAlert("You get score: " + score + ", please check your answers", false);
+        ui.showAlert(
+            "You get " + correctCount + " of " + count + " answers correct. Please correct the wrong ones.",
+            false
+        );
     }
 }
 

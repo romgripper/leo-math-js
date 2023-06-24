@@ -9519,7 +9519,23 @@ function generateAndShowQuestions(e, operator) {
     _ui.ui.hideGeneratorSection();
 }
 
+function checkAllAnswersFilled() {
+    var answerElements = _ui.ui.getAnswerElements();
+    for (var i = 0; i < answerElements.length; i++) {
+        var input = answerElements[i];
+        if (!input.value) {
+            _ui.ui.showAlert("Please fill in all the answers first", false);
+            input.focus();
+            return false;
+        }
+    }
+    return true;
+}
+
 function checkAnswers() {
+    if (!checkAllAnswersFilled()) {
+        return;
+    }
     var questionElements = _ui.ui.getQuestionElements();
     var count = questionElements.length;
 
@@ -9641,6 +9657,11 @@ var UI = function () {
         key: "getQuestionElements",
         value: function getQuestionElements() {
             return document.querySelectorAll(".question");
+        }
+    }, {
+        key: "getAnswerElements",
+        value: function getAnswerElements() {
+            return document.querySelectorAll(".answer");
         }
     }, {
         key: "getAnswerElement",

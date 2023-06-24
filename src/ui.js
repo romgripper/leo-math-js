@@ -56,6 +56,10 @@ class UI {
         return document.querySelectorAll(".question");
     }
 
+    getAnswerElements() {
+        return document.querySelectorAll(".answer");
+    }
+
     getAnswerElement(index) {
         return document.querySelector("#answer" + index);
     }

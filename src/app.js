@@ -13,7 +13,23 @@ function generateAndShowQuestions(e, operator) {
     ui.hideGeneratorSection();
 }
 
+function checkAllAnswersFilled() {
+    const answerElements = ui.getAnswerElements();
+    for (var i = 0; i < answerElements.length; i++) {
+        const input = answerElements[i];
+        if (!input.value) {
+            ui.showAlert("Please fill in all the answers first", false);
+            input.focus();
+            return false;
+        }
+    }
+    return true;
+}
+
 function checkAnswers() {
+    if (!checkAllAnswersFilled()) {
+        return;
+    }
     const questionElements = ui.getQuestionElements();
     const count = questionElements.length;
 

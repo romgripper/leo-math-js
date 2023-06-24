@@ -15,10 +15,9 @@ function generateAndShowQuestions(e, operator) {
 
 function checkAllAnswersFilled() {
     const answerElements = ui.getAnswerElements();
-    for (var i = 0; i < answerElements.length; i++) {
-        const input = answerElements[i];
+    for (const input of answerElements) {
         if (!input.value) {
-            ui.showAlert("Please answer all the questions first.", false);
+            ui.showAlert("Please answer all the questions before checking answers.", false);
             input.focus();
             return false;
         }

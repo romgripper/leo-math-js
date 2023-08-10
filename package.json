@@ -2,11 +2,14 @@
   "name": "babel_webpack_starter",
   "version": "1.0.0",
   "description": "Starter pack for compiling ES6+ apps to ES5",
+  "homepage": "https://github.com/romgripper/leo-math-js",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "webpack-dev-server --output-public-path=/js/"
+    "start": "webpack-dev-server --output-public-path=/js/",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d js"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -14,6 +17,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
+    "gh-pages": "^5.0.0",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
   }

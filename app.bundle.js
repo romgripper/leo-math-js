@@ -9765,12 +9765,13 @@ var Question = function () {
                 var operand1 = getRandomInt(maxOperand1);
                 var operand2 = getRandomInt(maxOperand2);
 
-                if (operator == "/") {
-                    operand1 = operand1 * operand2;
-                } else if (operator == "-" && operand1 < operand2) {
+                if ((operator === "-" || operator === "/") && operand1 < operand2) {
                     var temp = operand1;
                     operand1 = operand2;
                     operand2 = temp;
+                }
+                if (operator === "/") {
+                    operand1 = Math.floor(operand1 / operand2) * operand2;
                 }
                 questions.push(operand1 + " " + operator + " " + operand2);
             }

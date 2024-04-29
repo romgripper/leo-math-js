@@ -9609,12 +9609,8 @@ function showLogs() {
     }).map(function (key) {
         return { date: key.substring(DATE_PREFIX.length), results: localStorage.getItem(key) };
     }).sort(function (a, b) {
-        var c = new Date(b.date) - new Date(a.date);
-        console.log(b.date, new Date(b.date), new Date(a.date), a.date, new Date(b.date) - new Date(a.date));
-        return c;
+        return new Date(b.date) - new Date(a.date);
     });
-
-    console.log(logs);
 
     _ui.ui.showLogs(logs);
     _ui.ui.hideGeneratorSection();

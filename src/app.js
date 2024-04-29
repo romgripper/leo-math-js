@@ -9,6 +9,8 @@ function generateAndShowQuestions(e, operator) {
     const questionCount = ui.getCount();
 
     const questions = question.generate(operator, maxOperand1, maxOperand2, questionCount);
+
+    ui.setDate();
     ui.showQuestions(questions);
     ui.hideGeneratorSection();
 }
@@ -32,6 +34,8 @@ function checkAnswers() {
     const questionElements = ui.getQuestionElements();
     const count = questionElements.length;
 
+    let result = "";
+
     let correctCount = 0;
     let firstWrongAnswer = true;
     questionElements.forEach((questionElement) => {
@@ -40,9 +44,13 @@ function checkAnswers() {
         const answerElement = ui.getAnswerElement(index);
 
         const question = questionElement.textContent;
-        const expectedAnswer = eval(question);
+        const answer = answerElement.value;
+        result += question.replaceAll(" ", "") + "=" + answer;
 
-        if (expectedAnswer == answerElement.value) {
+        const correct = eval(question) == answer;
+        result += ";" + correct + ",";
+
+        if (correct) {
             answerElement.setAttribute("disabled", "");
             correctCount++;
         } else if (firstWrongAnswer) {
@@ -60,6 +68,8 @@ function checkAnswers() {
             false
         );
     }
+    result = result.substring(0, result.length - 1); // remove trailing ,
+    localStorage.setItem(ui.getDate(), result);
 }
 
 document.addEventListener("DOMContentLoaded", () => ui.init());

@@ -16,7 +16,6 @@ class UI {
     }
 
     init() {
-        this.date.textContent = new Date().toLocaleString();
         M.FormSelect.init(this.selects);
     }
 
@@ -90,6 +89,14 @@ class UI {
 
     hideGeneratorSection() {
         this.generatorSection.style.display = "none";
+    }
+
+    getDate() {
+        return this.date.textContent;
+    }
+
+    setDate(date) {
+        this.date.textContent = new Date().toLocaleString();
     }
 }
 

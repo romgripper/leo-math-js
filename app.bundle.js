@@ -9507,6 +9507,8 @@ var _ui = __webpack_require__(334);
 
 var _question = __webpack_require__(335);
 
+var DATE_PREFIX = "date:";
+
 function generateAndShowQuestions(e, operator) {
     e.preventDefault();
 
@@ -9515,6 +9517,8 @@ function generateAndShowQuestions(e, operator) {
     var questionCount = _ui.ui.getCount();
 
     var questions = _question.question.generate(operator, maxOperand1, maxOperand2, questionCount);
+
+    _ui.ui.setDate();
     _ui.ui.showQuestions(questions);
     _ui.ui.hideGeneratorSection();
 }
@@ -9560,6 +9564,8 @@ function checkAnswers() {
     var questionElements = _ui.ui.getQuestionElements();
     var count = questionElements.length;
 
+    var result = "";
+
     var correctCount = 0;
     var firstWrongAnswer = true;
     questionElements.forEach(function (questionElement) {
@@ -9568,9 +9574,13 @@ function checkAnswers() {
         var answerElement = _ui.ui.getAnswerElement(index);
 
         var question = questionElement.textContent;
-        var expectedAnswer = eval(question);
+        var answer = answerElement.value;
+        result += question.replaceAll(" ", "") + "=" + answer;
 
-        if (expectedAnswer == answerElement.value) {
+        var correct = eval(question) == answer;
+        result += ";" + correct + ",";
+
+        if (correct) {
             answerElement.setAttribute("disabled", "");
             correctCount++;
         } else if (firstWrongAnswer) {
@@ -9585,6 +9595,22 @@ function checkAnswers() {
     } else {
         _ui.ui.showAlert("You get " + correctCount + " of " + count + " answers correct. Please correct the wrong ones.", false);
     }
+    result = result.substring(0, result.length - 1); // remove trailing ,
+    localStorage.setItem(DATE_PREFIX + _ui.ui.getDate(), result);
+}
+
+function showLogs() {
+    var keys = Object.keys(localStorage);
+    var logs = keys.filter(function (key) {
+        return key.startsWith(DATE_PREFIX);
+    }).map(function (key) {
+        return { date: key.substring(DATE_PREFIX.length), results: localStorage.getItem(key) };
+    }).sort(function (a, b) {
+        return new Date(b.date) - new Date(a.date);
+    });
+
+    _ui.ui.showLogs(logs);
+    _ui.ui.hideGeneratorSection();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -9604,6 +9630,7 @@ _ui.ui.divisionButton.addEventListener("click", function (e) {
     return generateAndShowQuestions(e, "/");
 });
 _ui.ui.checkAnswersButton.addEventListener("click", checkAnswers);
+_ui.ui.logsButton.addEventListener("click", showLogs);
 
 /***/ }),
 /* 334 */
@@ -9625,24 +9652,30 @@ var UI = function () {
         _classCallCheck(this, UI);
 
         this.date = document.getElementById("date");
+
         this.maxOperand1 = document.getElementById("max-operand1");
         this.generatorSection = document.getElementById("generator");
         this.maxOperand2 = document.getElementById("max-operand2");
         this.count = document.getElementById("count");
+
         this.selects = document.querySelectorAll("select");
         this.additionButton = document.getElementById("addition");
         this.subtractionButton = document.getElementById("subtraction");
         this.multiplicationButton = document.getElementById("multiplication");
         this.divisionButton = document.getElementById("division");
+
         this.questionList = document.getElementById("question-list");
         this.questionsSection = document.getElementById("questions");
         this.checkAnswersButton = document.getElementById("check-answers");
+
+        this.logsButton = document.getElementById("show-logs");
+        this.logsSection = document.getElementById("logs");
+        this.logList = document.getElementById("log-list");
     }
 
     _createClass(UI, [{
         key: "init",
         value: function init() {
-            this.date.textContent = new Date().toLocaleString();
             M.FormSelect.init(this.selects);
         }
     }, {
@@ -9678,6 +9711,32 @@ var UI = function () {
             this.questionsSection.style.display = "block";
         }
     }, {
+        key: "showLogs",
+        value: function showLogs(logs) {
+            var _this = this;
+
+            this.logList.innerHTML = logs.map(function (log) {
+                return "<tr><td>" + log.date + "</td><td>" + _this.mapResults(log.results) + "</td></tr>";
+            }).join("\n");
+            this.logsSection.style.display = "block";
+        }
+    }, {
+        key: "mapResults",
+        value: function mapResults(results) {
+            return results.split(",").map(this.mapResult).join("&nbsp;&nbsp;");
+        }
+
+        /**
+         * 63/21=1;false or 70/35=2;true
+         */
+
+    }, {
+        key: "mapResult",
+        value: function mapResult(result) {
+            var color = result.substring(result.indexOf(";") + 1) === "true" ? "green" : "red";
+            return "<span style=\"color: " + color + "\">" + result.substring(0, result.indexOf(";")) + "</span>";
+        }
+    }, {
         key: "getQuestionElements",
         value: function getQuestionElements() {
             return document.querySelectorAll(".question");
@@ -9700,7 +9759,7 @@ var UI = function () {
     }, {
         key: "showAlert",
         value: function showAlert(message, success) {
-            var _this = this;
+            var _this2 = this;
 
             this.clearAlert();
             var div = document.createElement("div");
@@ -9709,7 +9768,7 @@ var UI = function () {
             this.questionsSection.insertBefore(div, this.checkAnswersButton.parentElement);
             if (!success) {
                 setTimeout(function () {
-                    _this.clearAlert();
+                    _this2.clearAlert();
                 }, 3000);
             }
         }
@@ -9725,6 +9784,16 @@ var UI = function () {
         key: "hideGeneratorSection",
         value: function hideGeneratorSection() {
             this.generatorSection.style.display = "none";
+        }
+    }, {
+        key: "getDate",
+        value: function getDate() {
+            return this.date.textContent;
+        }
+    }, {
+        key: "setDate",
+        value: function setDate(date) {
+            this.date.textContent = new Date().toLocaleString();
         }
     }]);
 

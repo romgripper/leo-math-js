@@ -9,7 +9,7 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <title>Leo's Math Homework</title>
     <style>
         .btn-block {
@@ -39,73 +39,79 @@
 </head>
 
 <body>
-    <nav>
-        <div class="nav-wrapper blue">
-            <div class="container">
-                <a href="#" class="brand-logo center">Math</a>
-                <p id="date" class="right"></p>
-            </div>
+<nav>
+    <div class="nav-wrapper blue">
+        <div class="container">
+            <a href="#" class="brand-logo center">Math</a>
+            <p id="date" class="right"></p>
         </div>
-    </nav>
-    <br>
-    <div class="container">
-        <div class="card">
-            <div class="card-content" id="generator">
-                <form class="col">
-                    <div class="row">
-                        <div class="col s4">
-                            <label for="max-operand1">Operand 1</label>
-                            <select id="max-operand1" name="operand1" class="browser-default">
-                                <option value="10">1 - 10</option>
-                                <option value="100" selected>1 - 100</option>
-                                <option value="1000">1 - 1000</option>
-                            </select>
-                        </div>
-                        <div class="col s4">
-                            <label for="max-operand2">Operand 2</label>
-                            <select id="max-operand2" name="operand2" class="browser-default">
-                                <option value="10">1 - 10</option>
-                                <option value="100" selected>1 - 100</option>
-                                <option value="1000">1 - 1000</option>
-                            </select>
-                        </div>
-                        <div class="col s4">
-                            <label for="count">Question Count</label>
-                            <select id="count" name="count" class="browser-default">
-                                <option value="5">5</option>
-                                <option value="10" selected>10</option>
-                                <option value="20">20</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s3">
-                            <button class="btn blue darken-3 btn-block" id="addition">Addition</button>
-                        </div>
-                        <div class="col s3">
-                            <button class="btn orange btn-block" id="subtraction">Subtraction</button>
-                        </div>
-                        <div class="col s3">
-                            <button class="btn red btn-block" id="multiplication">Multiplication</button>
-                        </div>
-                        <div class="col s3">
-                            <button class="btn green btn-block" id="division">Division</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <section id="questions" style="display: none">
-            <div id="question-list"></div>
-            <div class="row center-align">
-                <button class="btn blue" id="check-answers">Check Answers</button>
-            </div>
-        </section>
     </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+</nav>
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-content" id="generator">
+            <form class="row">
+                <div class="col s4">
+                    <label for="max-operand1">Operand 1</label>
+                    <select id="max-operand1" name="operand1" class="browser-default">
+                        <option value="10">1 - 10</option>
+                        <option value="100" selected>1 - 100</option>
+                        <option value="1000">1 - 1000</option>
+                    </select>
+                </div>
+                <div class="col s4">
+                    <label for="max-operand2">Operand 2</label>
+                    <select id="max-operand2" name="operand2" class="browser-default">
+                        <option value="10">1 - 10</option>
+                        <option value="100" selected>1 - 100</option>
+                        <option value="1000">1 - 1000</option>
+                    </select>
+                </div>
+                <div class="col s4">
+                    <label for="count">Question Count</label>
+                    <select id="count" name="count" class="browser-default">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col s3">
+                    <button class="btn blue darken-3 btn-block" id="addition">Addition</button>
+                </div>
+                <div class="col s3">
+                    <button class="btn orange btn-block" id="subtraction">Subtraction</button>
+                </div>
+                <div class="col s3">
+                    <button class="btn red btn-block" id="multiplication">Multiplication</button>
+                </div>
+                <div class="col s3">
+                    <button class="btn green btn-block" id="division">Division</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <button class="btn green btn-block" id="show-logs">Logs</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id="questions" style="display: none">
+        <div id="question-list"></div>
+        <div class="row center-align">
+            <button class="btn blue" id="check-answers">Check Answers</button>
+        </div>
+    </section>
+    <section id="logs" style="display: none">
+        <table id="log-list"></table>
+    </section>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="app.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="app.bundle.js"></script>
 </body>
 
 </html>

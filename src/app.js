@@ -1,6 +1,8 @@
 import { ui } from "./ui";
 import { question } from "./question";
 
+const DATE_PREFIX = "date:";
+
 function generateAndShowQuestions(e, operator) {
     e.preventDefault();
 
@@ -69,7 +71,18 @@ function checkAnswers() {
         );
     }
     result = result.substring(0, result.length - 1); // remove trailing ,
-    localStorage.setItem(ui.getDate(), result);
+    localStorage.setItem(DATE_PREFIX + ui.getDate(), result);
+}
+
+function showLogs() {
+    const keys = Object.keys(localStorage);
+    const logs = keys
+        .filter(key => key.startsWith(DATE_PREFIX))
+        .map(key => ({date: key.substring(DATE_PREFIX.length), results: localStorage.getItem(key)}))
+        .sort( (a, b) => new Date(b.date) - new Date(a.date));
+
+    ui.showLogs(logs);
+    ui.hideGeneratorSection();
 }
 
 document.addEventListener("DOMContentLoaded", () => ui.init());
@@ -79,3 +92,4 @@ ui.subtractionButton.addEventListener("click", (e) => generateAndShowQuestions(e
 ui.multiplicationButton.addEventListener("click", (e) => generateAndShowQuestions(e, "*"));
 ui.divisionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "/"));
 ui.checkAnswersButton.addEventListener("click", checkAnswers);
+ui.logsButton.addEventListener("click", showLogs);

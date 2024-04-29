@@ -1,18 +1,25 @@
 class UI {
     constructor() {
         this.date = document.getElementById("date");
+
         this.maxOperand1 = document.getElementById("max-operand1");
         this.generatorSection = document.getElementById("generator");
         this.maxOperand2 = document.getElementById("max-operand2");
         this.count = document.getElementById("count");
+
         this.selects = document.querySelectorAll("select");
         this.additionButton = document.getElementById("addition");
         this.subtractionButton = document.getElementById("subtraction");
         this.multiplicationButton = document.getElementById("multiplication");
         this.divisionButton = document.getElementById("division");
+
         this.questionList = document.getElementById("question-list");
         this.questionsSection = document.getElementById("questions");
         this.checkAnswersButton = document.getElementById("check-answers");
+
+        this.logsButton = document.getElementById("show-logs");
+        this.logsSection = document.getElementById("logs");
+        this.logList = document.getElementById("log-list");
     }
 
     init() {
@@ -49,6 +56,25 @@ class UI {
         }
         this.questionList.innerHTML = html;
         this.questionsSection.style.display = "block";
+    }
+
+    showLogs(logs) {
+        this.logList.innerHTML = logs.map(log => `<tr><td>${log.date}</td><td>${this.mapResults(log.results)}</td></tr>`).join("\n");
+        this.logsSection.style.display = "block";
+    }
+
+    mapResults(results) {
+        return results.split(",")
+            .map(this.mapResult)
+            .join("&nbsp;&nbsp;");
+    }
+
+    /**
+     * 63/21=1;false or 70/35=2;true
+     */
+    mapResult(result) {
+        const color = result.substring(result.indexOf(";") + 1) === "true"? "green" : "red";
+        return `<span style="color: ${color}">${result.substring(0, result.indexOf(";"))}</span>`;
     }
 
     getQuestionElements() {

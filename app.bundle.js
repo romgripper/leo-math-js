@@ -9509,6 +9509,8 @@ var _question = __webpack_require__(335);
 
 var DATE_PREFIX = "date:";
 
+var date = void 0;
+
 function generateAndShowQuestions(e, operator) {
     e.preventDefault();
 
@@ -9518,7 +9520,8 @@ function generateAndShowQuestions(e, operator) {
 
     var questions = _question.question.generate(operator, maxOperand1, maxOperand2, questionCount);
 
-    _ui.ui.setDate();
+    date = new Date();
+    _ui.ui.setDate(date);
     _ui.ui.showQuestions(questions);
     _ui.ui.hideGeneratorSection();
 }
@@ -9596,7 +9599,7 @@ function checkAnswers() {
         _ui.ui.showAlert("You get " + correctCount + " of " + count + " answers correct. Please correct the wrong ones.", false);
     }
     result = result.substring(0, result.length - 1); // remove trailing ,
-    localStorage.setItem(DATE_PREFIX + _ui.ui.getDate(), result);
+    localStorage.setItem(DATE_PREFIX + date, result);
 }
 
 function showLogs() {
@@ -9606,8 +9609,12 @@ function showLogs() {
     }).map(function (key) {
         return { date: key.substring(DATE_PREFIX.length), results: localStorage.getItem(key) };
     }).sort(function (a, b) {
-        return new Date(b.date) - new Date(a.date);
+        var c = new Date(b.date) - new Date(a.date);
+        console.log(b.date, new Date(b.date), new Date(a.date), a.date, new Date(b.date) - new Date(a.date));
+        return c;
     });
+
+    console.log(logs);
 
     _ui.ui.showLogs(logs);
     _ui.ui.hideGeneratorSection();
@@ -9716,7 +9723,7 @@ var UI = function () {
             var _this = this;
 
             this.logList.innerHTML = logs.map(function (log) {
-                return "<tr><td>" + log.date + "</td><td>" + _this.mapResults(log.results) + "</td></tr>";
+                return "<tr><td>" + new Date(log.date).toLocaleString() + "</td><td>" + _this.mapResults(log.results) + "</td></tr>";
             }).join("\n");
             this.logsSection.style.display = "block";
         }
@@ -9786,14 +9793,9 @@ var UI = function () {
             this.generatorSection.style.display = "none";
         }
     }, {
-        key: "getDate",
-        value: function getDate() {
-            return this.date.textContent;
-        }
-    }, {
         key: "setDate",
         value: function setDate(date) {
-            this.date.textContent = new Date().toLocaleString();
+            this.date.textContent = date.toLocaleString();
         }
     }]);
 

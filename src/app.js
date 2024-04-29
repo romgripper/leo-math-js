@@ -3,6 +3,8 @@ import { question } from "./question";
 
 const DATE_PREFIX = "date:";
 
+let date;
+
 function generateAndShowQuestions(e, operator) {
     e.preventDefault();
 
@@ -12,7 +14,8 @@ function generateAndShowQuestions(e, operator) {
 
     const questions = question.generate(operator, maxOperand1, maxOperand2, questionCount);
 
-    ui.setDate();
+    date = new Date();
+    ui.setDate(date);
     ui.showQuestions(questions);
     ui.hideGeneratorSection();
 }
@@ -71,7 +74,7 @@ function checkAnswers() {
         );
     }
     result = result.substring(0, result.length - 1); // remove trailing ,
-    localStorage.setItem(DATE_PREFIX + ui.getDate(), result);
+    localStorage.setItem(DATE_PREFIX + date, result);
 }
 
 function showLogs() {
@@ -79,7 +82,7 @@ function showLogs() {
     const logs = keys
         .filter(key => key.startsWith(DATE_PREFIX))
         .map(key => ({date: key.substring(DATE_PREFIX.length), results: localStorage.getItem(key)}))
-        .sort( (a, b) => new Date(b.date) - new Date(a.date));
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     ui.showLogs(logs);
     ui.hideGeneratorSection();

@@ -59,7 +59,9 @@ class UI {
     }
 
     showLogs(logs) {
-        this.logList.innerHTML = logs.map(log => `<tr><td>${log.date}</td><td>${this.mapResults(log.results)}</td></tr>`).join("\n");
+        this.logList.innerHTML = logs.map(log =>
+                `<tr><td>${new Date(log.date).toLocaleString()}</td><td>${this.mapResults(log.results)}</td></tr>`)
+            .join("\n");
         this.logsSection.style.display = "block";
     }
 
@@ -117,12 +119,8 @@ class UI {
         this.generatorSection.style.display = "none";
     }
 
-    getDate() {
-        return this.date.textContent;
-    }
-
     setDate(date) {
-        this.date.textContent = new Date().toLocaleString();
+        this.date.textContent = date.toLocaleString();
     }
 }
 

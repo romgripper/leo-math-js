@@ -1,9 +1,7 @@
 import { ui } from "./ui";
-import { question } from "./question";
+import { question, PLUS, MINUS, MULTIPLY, DIVIDE } from "./question";
 
 const DATE_PREFIX = "date:";
-
-let date;
 
 function generateAndShowQuestions(e, operator) {
     e.preventDefault();
@@ -14,10 +12,7 @@ function generateAndShowQuestions(e, operator) {
 
     const questions = question.generate(operator, maxOperand1, maxOperand2, questionCount);
 
-    date = new Date();
-    ui.setDate(date);
-    ui.showQuestions(questions);
-    ui.hideGeneratorSection();
+    ui.showQuestions(questions, []);
 }
 
 function checkAllAnswersFilled() {
@@ -52,7 +47,7 @@ function checkAnswers() {
         const answer = answerElement.value;
         result += question + " = " + answer;
 
-        const correct = eval(question.replaceAll("÷", "/").replaceAll("×", "*")) == answer;
+        const correct = eval(question.replaceAll(DIVIDE, "/").replaceAll(MULTIPLY, "*")) == answer;
         result += ";" + correct + ",";
 
         if (correct) {
@@ -74,7 +69,7 @@ function checkAnswers() {
         );
     }
     result = result.substring(0, result.length - 1); // remove trailing ,
-    localStorage.setItem(DATE_PREFIX + date, result);
+    localStorage.setItem(DATE_PREFIX + ui.getDate(), result);
 }
 
 function showLogs() {
@@ -85,14 +80,14 @@ function showLogs() {
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     ui.showLogs(logs);
-    ui.hideGeneratorSection();
 }
 
 document.addEventListener("DOMContentLoaded", () => ui.init());
 
-ui.additionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "+"));
-ui.subtractionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "-"));
-ui.multiplicationButton.addEventListener("click", (e) => generateAndShowQuestions(e, "×"));
-ui.divisionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "÷"));
+ui.additionButton.addEventListener("click", (e) => generateAndShowQuestions(e, PLUS));
+ui.subtractionButton.addEventListener("click", (e) => generateAndShowQuestions(e, MINUS));
+ui.multiplicationButton.addEventListener("click", (e) => generateAndShowQuestions(e, MULTIPLY));
+ui.divisionButton.addEventListener("click", (e) => generateAndShowQuestions(e, DIVIDE));
 ui.checkAnswersButton.addEventListener("click", checkAnswers);
 ui.logsButton.addEventListener("click", showLogs);
+ui.logsSection.addEventListener("click", e => ui.showQuestionsWithAnswers(e));

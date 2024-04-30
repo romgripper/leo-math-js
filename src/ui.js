@@ -1,6 +1,7 @@
 class UI {
     constructor() {
-        this.date = document.getElementById("date");
+        this.dateElement = document.getElementById("date");
+        this.localDateElement = document.getElementById("local-date");
 
         this.maxOperand1 = document.getElementById("max-operand1");
         this.generatorSection = document.getElementById("generator");
@@ -38,16 +39,19 @@ class UI {
         return +this.count.value;
     }
 
-    showQuestions(questions) {
+    showQuestions(questions, answers, date) {
+        if (!date) date = new Date();
+        this.setDate(date);
+
         let html = "";
         for (let i = 0; i < questions.length; i++) {
             if (i % 4 === 0) {
                 html += '</div><div class="row">';
             }
-            html += `                        
-                <div class="input-field col s3">
-                    <input type="number" class="answer" id="answer${i}">
-                    <label class="question" id="question${i}" for="answer${i}">${questions[i]}</label>
+            html +=
+                `<div class="input-field col s3">
+                    <input type="number" class="answer" id="answer${i}" value="${answers[i] || ''}">
+                    <label class="question ${answers[i] && 'active'}" id="question${i}" for="answer${i}">${questions[i]}</label>
                 </div>`;
         }
         if (html.startsWith("</div>")) {
@@ -56,13 +60,40 @@ class UI {
         }
         this.questionList.innerHTML = html;
         this.questionsSection.style.display = "block";
+        this.hideGeneratorSection();
+        this.hideLogsSection();
+    }
+
+    showQuestionsWithAnswers(e) {
+        let row = e.target.parentElement;
+        while (row.nodeName !== "TR") {
+            row = row.parentElement;
+        }
+
+        const questions = [];
+        const answers = [];
+        const date = new Date(row.querySelector(".date").textContent);
+        const self = this;
+        row.querySelectorAll("span").forEach(span => self.parseResult(span.textContent, questions, answers));
+        this.showQuestions(questions, answers, date);
+    }
+
+    parseResult(result, questions, answers) {
+        const tokens = result.split(" = ");
+        questions.push(tokens[0]);
+        answers.push(tokens[1]);
     }
 
     showLogs(logs) {
         this.logList.innerHTML = logs.map(log =>
-                `<tr><td>${new Date(log.date).toLocaleString()}</td><td>${this.mapResults(log.results)}</td></tr>`)
+                `<tr>
+                    <td>${new Date(log.date).toLocaleString()}</td>
+                    <td class="date" style="display: none;">${log.date}</td>
+                    <td class="results">${this.mapResults(log.results)}</td>
+                </tr>`)
             .join("\n");
         this.logsSection.style.display = "block";
+        this.hideGeneratorSection();
     }
 
     mapResults(results) {
@@ -119,8 +150,17 @@ class UI {
         this.generatorSection.style.display = "none";
     }
 
+    hideLogsSection() {
+        this.logsSection.style.display = "none";
+    }
+
     setDate(date) {
-        this.date.textContent = date.toLocaleString();
+        this.dateElement.textContent = date;
+        this.localDateElement.textContent = date.toLocaleString();
+    }
+
+    getDate() {
+        return new Date(this.dateElement.textContent);
     }
 }
 

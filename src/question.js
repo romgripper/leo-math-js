@@ -9,12 +9,12 @@ class Question {
             let operand1 = getRandomInt(maxOperand1);
             let operand2 = getRandomInt(maxOperand2);
 
-            if ((operator === "-" || operator === "/") && operand1 < operand2) {
+            if ((operator === MINUS || operator === DIVIDE) && operand1 < operand2) {
                 const temp = operand1;
                 operand1 = operand2;
                 operand2 = temp;
             }
-            if (operator === "÷") {
+            if (operator === DIVIDE) {
                 operand1 = Math.floor(operand1 / operand2) * operand2;
             }
             questions.push(`${operand1} ${operator} ${operand2}`);
@@ -24,3 +24,8 @@ class Question {
 }
 
 export const question = new Question();
+
+export const PLUS = "+";
+export const MINUS = "-";
+export const MULTIPLY = "×";
+export const DIVIDE = "÷";

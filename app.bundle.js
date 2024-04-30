@@ -9509,8 +9509,6 @@ var _question = __webpack_require__(335);
 
 var DATE_PREFIX = "date:";
 
-var date = void 0;
-
 function generateAndShowQuestions(e, operator) {
     e.preventDefault();
 
@@ -9520,10 +9518,7 @@ function generateAndShowQuestions(e, operator) {
 
     var questions = _question.question.generate(operator, maxOperand1, maxOperand2, questionCount);
 
-    date = new Date();
-    _ui.ui.setDate(date);
-    _ui.ui.showQuestions(questions);
-    _ui.ui.hideGeneratorSection();
+    _ui.ui.showQuestions(questions, []);
 }
 
 function checkAllAnswersFilled() {
@@ -9580,7 +9575,7 @@ function checkAnswers() {
         var answer = answerElement.value;
         result += question + " = " + answer;
 
-        var correct = eval(question.replaceAll("÷", "/").replaceAll("×", "*")) == answer;
+        var correct = eval(question.replaceAll(_question.DIVIDE, "/").replaceAll(_question.MULTIPLY, "*")) == answer;
         result += ";" + correct + ",";
 
         if (correct) {
@@ -9599,7 +9594,7 @@ function checkAnswers() {
         _ui.ui.showAlert("You get " + correctCount + " of " + count + " answers correct. Please correct the wrong ones.", false);
     }
     result = result.substring(0, result.length - 1); // remove trailing ,
-    localStorage.setItem(DATE_PREFIX + date, result);
+    localStorage.setItem(DATE_PREFIX + _ui.ui.getDate(), result);
 }
 
 function showLogs() {
@@ -9613,7 +9608,6 @@ function showLogs() {
     });
 
     _ui.ui.showLogs(logs);
-    _ui.ui.hideGeneratorSection();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -9621,19 +9615,22 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 _ui.ui.additionButton.addEventListener("click", function (e) {
-    return generateAndShowQuestions(e, "+");
+    return generateAndShowQuestions(e, _question.PLUS);
 });
 _ui.ui.subtractionButton.addEventListener("click", function (e) {
-    return generateAndShowQuestions(e, "-");
+    return generateAndShowQuestions(e, _question.MINUS);
 });
 _ui.ui.multiplicationButton.addEventListener("click", function (e) {
-    return generateAndShowQuestions(e, "×");
+    return generateAndShowQuestions(e, _question.MULTIPLY);
 });
 _ui.ui.divisionButton.addEventListener("click", function (e) {
-    return generateAndShowQuestions(e, "÷");
+    return generateAndShowQuestions(e, _question.DIVIDE);
 });
 _ui.ui.checkAnswersButton.addEventListener("click", checkAnswers);
 _ui.ui.logsButton.addEventListener("click", showLogs);
+_ui.ui.logsSection.addEventListener("click", function (e) {
+    return _ui.ui.showQuestionsWithAnswers(e);
+});
 
 /***/ }),
 /* 334 */
@@ -9654,7 +9651,8 @@ var UI = function () {
     function UI() {
         _classCallCheck(this, UI);
 
-        this.date = document.getElementById("date");
+        this.dateElement = document.getElementById("date");
+        this.localDateElement = document.getElementById("local-date");
 
         this.maxOperand1 = document.getElementById("max-operand1");
         this.generatorSection = document.getElementById("generator");
@@ -9698,13 +9696,16 @@ var UI = function () {
         }
     }, {
         key: "showQuestions",
-        value: function showQuestions(questions) {
+        value: function showQuestions(questions, answers, date) {
+            if (!date) date = new Date();
+            this.setDate(date);
+
             var html = "";
             for (var i = 0; i < questions.length; i++) {
                 if (i % 4 === 0) {
                     html += '</div><div class="row">';
                 }
-                html += "                        \n                <div class=\"input-field col s3\">\n                    <input type=\"number\" class=\"answer\" id=\"answer" + i + "\">\n                    <label class=\"question\" id=\"question" + i + "\" for=\"answer" + i + "\">" + questions[i] + "</label>\n                </div>";
+                html += "<div class=\"input-field col s3\">\n                    <input type=\"number\" class=\"answer\" id=\"answer" + i + "\" value=\"" + (answers[i] || '') + "\">\n                    <label class=\"question " + (answers[i] && 'active') + "\" id=\"question" + i + "\" for=\"answer" + i + "\">" + questions[i] + "</label>\n                </div>";
             }
             if (html.startsWith("</div>")) {
                 html = html.substring("</div>".length);
@@ -9712,6 +9713,32 @@ var UI = function () {
             }
             this.questionList.innerHTML = html;
             this.questionsSection.style.display = "block";
+            this.hideGeneratorSection();
+            this.hideLogsSection();
+        }
+    }, {
+        key: "showQuestionsWithAnswers",
+        value: function showQuestionsWithAnswers(e) {
+            var row = e.target.parentElement;
+            while (row.nodeName !== "TR") {
+                row = row.parentElement;
+            }
+
+            var questions = [];
+            var answers = [];
+            var date = new Date(row.querySelector(".date").textContent);
+            var self = this;
+            row.querySelectorAll("span").forEach(function (span) {
+                return self.parseResult(span.textContent, questions, answers);
+            });
+            this.showQuestions(questions, answers, date);
+        }
+    }, {
+        key: "parseResult",
+        value: function parseResult(result, questions, answers) {
+            var tokens = result.split(" = ");
+            questions.push(tokens[0]);
+            answers.push(tokens[1]);
         }
     }, {
         key: "showLogs",
@@ -9719,9 +9746,10 @@ var UI = function () {
             var _this = this;
 
             this.logList.innerHTML = logs.map(function (log) {
-                return "<tr><td>" + new Date(log.date).toLocaleString() + "</td><td>" + _this.mapResults(log.results) + "</td></tr>";
+                return "<tr>\n                    <td>" + new Date(log.date).toLocaleString() + "</td>\n                    <td class=\"date\" style=\"display: none;\">" + log.date + "</td>\n                    <td class=\"results\">" + _this.mapResults(log.results) + "</td>\n                </tr>";
             }).join("\n");
             this.logsSection.style.display = "block";
+            this.hideGeneratorSection();
         }
     }, {
         key: "mapResults",
@@ -9789,9 +9817,20 @@ var UI = function () {
             this.generatorSection.style.display = "none";
         }
     }, {
+        key: "hideLogsSection",
+        value: function hideLogsSection() {
+            this.logsSection.style.display = "none";
+        }
+    }, {
         key: "setDate",
         value: function setDate(date) {
-            this.date.textContent = date.toLocaleString();
+            this.dateElement.textContent = date;
+            this.localDateElement.textContent = date.toLocaleString();
+        }
+    }, {
+        key: "getDate",
+        value: function getDate() {
+            return new Date(this.dateElement.textContent);
         }
     }]);
 
@@ -9832,12 +9871,12 @@ var Question = function () {
                 var operand1 = getRandomInt(maxOperand1);
                 var operand2 = getRandomInt(maxOperand2);
 
-                if ((operator === "-" || operator === "/") && operand1 < operand2) {
+                if ((operator === MINUS || operator === DIVIDE) && operand1 < operand2) {
                     var temp = operand1;
                     operand1 = operand2;
                     operand2 = temp;
                 }
-                if (operator === "÷") {
+                if (operator === DIVIDE) {
                     operand1 = Math.floor(operand1 / operand2) * operand2;
                 }
                 questions.push(operand1 + " " + operator + " " + operand2);
@@ -9850,6 +9889,11 @@ var Question = function () {
 }();
 
 var question = exports.question = new Question();
+
+var PLUS = exports.PLUS = "+";
+var MINUS = exports.MINUS = "-";
+var MULTIPLY = exports.MULTIPLY = "×";
+var DIVIDE = exports.DIVIDE = "÷";
 
 /***/ })
 /******/ ]);

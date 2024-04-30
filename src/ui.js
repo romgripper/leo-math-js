@@ -68,7 +68,7 @@ class UI {
     mapResults(results) {
         return results.split(",")
             .map(this.mapResult)
-            .join("&nbsp;&nbsp;");
+            .join("&nbsp;&nbsp;&nbsp;&nbsp;");
     }
 
     /**

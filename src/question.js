@@ -14,7 +14,7 @@ class Question {
                 operand1 = operand2;
                 operand2 = temp;
             }
-            if (operator === "/") {
+            if (operator === "÷") {
                 operand1 = Math.floor(operand1 / operand2) * operand2;
             }
             questions.push(`${operand1} ${operator} ${operand2}`);

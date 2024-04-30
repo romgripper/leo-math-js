@@ -50,9 +50,9 @@ function checkAnswers() {
 
         const question = questionElement.textContent;
         const answer = answerElement.value;
-        result += question.replaceAll(" ", "") + "=" + answer;
+        result += question + " = " + answer;
 
-        const correct = eval(question) == answer;
+        const correct = eval(question.replaceAll("÷", "/").replaceAll("×", "*")) == answer;
         result += ";" + correct + ",";
 
         if (correct) {
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => ui.init());
 
 ui.additionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "+"));
 ui.subtractionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "-"));
-ui.multiplicationButton.addEventListener("click", (e) => generateAndShowQuestions(e, "*"));
-ui.divisionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "/"));
+ui.multiplicationButton.addEventListener("click", (e) => generateAndShowQuestions(e, "×"));
+ui.divisionButton.addEventListener("click", (e) => generateAndShowQuestions(e, "÷"));
 ui.checkAnswersButton.addEventListener("click", checkAnswers);
 ui.logsButton.addEventListener("click", showLogs);

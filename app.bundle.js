@@ -9578,9 +9578,9 @@ function checkAnswers() {
 
         var question = questionElement.textContent;
         var answer = answerElement.value;
-        result += question.replaceAll(" ", "") + "=" + answer;
+        result += question + " = " + answer;
 
-        var correct = eval(question) == answer;
+        var correct = eval(question.replaceAll("÷", "/").replaceAll("×", "*")) == answer;
         result += ";" + correct + ",";
 
         if (correct) {
@@ -9627,10 +9627,10 @@ _ui.ui.subtractionButton.addEventListener("click", function (e) {
     return generateAndShowQuestions(e, "-");
 });
 _ui.ui.multiplicationButton.addEventListener("click", function (e) {
-    return generateAndShowQuestions(e, "*");
+    return generateAndShowQuestions(e, "×");
 });
 _ui.ui.divisionButton.addEventListener("click", function (e) {
-    return generateAndShowQuestions(e, "/");
+    return generateAndShowQuestions(e, "÷");
 });
 _ui.ui.checkAnswersButton.addEventListener("click", checkAnswers);
 _ui.ui.logsButton.addEventListener("click", showLogs);
@@ -9726,7 +9726,7 @@ var UI = function () {
     }, {
         key: "mapResults",
         value: function mapResults(results) {
-            return results.split(",").map(this.mapResult).join("&nbsp;&nbsp;");
+            return results.split(",").map(this.mapResult).join("&nbsp;&nbsp;&nbsp;&nbsp;");
         }
 
         /**
@@ -9837,7 +9837,7 @@ var Question = function () {
                     operand1 = operand2;
                     operand2 = temp;
                 }
-                if (operator === "/") {
+                if (operator === "÷") {
                     operand1 = Math.floor(operand1 / operand2) * operand2;
                 }
                 questions.push(operand1 + " " + operator + " " + operand2);

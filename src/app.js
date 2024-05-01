@@ -15,22 +15,7 @@ function generateAndShowQuestions(e, operator) {
     ui.showQuestions(questions, []);
 }
 
-function checkAllAnswersFilled() {
-    const answerElements = ui.getAnswerElements();
-    for (const input of answerElements) {
-        if (!input.value) {
-            ui.showAlert("Please answer all the questions before checking answers.", false);
-            input.focus();
-            return false;
-        }
-    }
-    return true;
-}
-
 function checkAnswers() {
-    if (!checkAllAnswersFilled()) {
-        return;
-    }
     const questionElements = ui.getQuestionElements();
     const count = questionElements.length;
 

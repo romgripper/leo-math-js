@@ -79,9 +79,9 @@ class UI {
     }
 
     parseResult(result, questions, answers) {
-        const tokens = result.split(" = ");
-        questions.push(tokens[0]);
-        answers.push(tokens[1]);
+        const tokens = result.split("=");
+        questions.push(tokens[0].trim());
+        answers.push(tokens[1].trim());
     }
 
     showLogs(logs) {

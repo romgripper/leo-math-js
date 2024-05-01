@@ -9736,9 +9736,9 @@ var UI = function () {
     }, {
         key: "parseResult",
         value: function parseResult(result, questions, answers) {
-            var tokens = result.split(" = ");
-            questions.push(tokens[0]);
-            answers.push(tokens[1]);
+            var tokens = result.split("=");
+            questions.push(tokens[0].trim());
+            answers.push(tokens[1].trim());
         }
     }, {
         key: "showLogs",

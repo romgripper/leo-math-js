@@ -9597,9 +9597,9 @@ function checkAnswers() {
     localStorage.setItem(DATE_PREFIX + _ui.ui.getDate(), result);
 }
 
-function showLogs() {
+function showHistory() {
     var keys = Object.keys(localStorage);
-    var logs = keys.filter(function (key) {
+    var history = keys.filter(function (key) {
         return key.startsWith(DATE_PREFIX);
     }).map(function (key) {
         return { date: key.substring(DATE_PREFIX.length), results: localStorage.getItem(key) };
@@ -9607,7 +9607,7 @@ function showLogs() {
         return new Date(b.date) - new Date(a.date);
     });
 
-    _ui.ui.showLogs(logs);
+    _ui.ui.showHistory(history);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -9627,8 +9627,8 @@ _ui.ui.divisionButton.addEventListener("click", function (e) {
     return generateAndShowQuestions(e, _question.DIVIDE);
 });
 _ui.ui.checkAnswersButton.addEventListener("click", checkAnswers);
-_ui.ui.logsButton.addEventListener("click", showLogs);
-_ui.ui.logsSection.addEventListener("click", function (e) {
+_ui.ui.historyButton.addEventListener("click", showHistory);
+_ui.ui.historySection.addEventListener("click", function (e) {
     return _ui.ui.showQuestionsWithAnswers(e);
 });
 
@@ -9669,9 +9669,9 @@ var UI = function () {
         this.questionsSection = document.getElementById("questions");
         this.checkAnswersButton = document.getElementById("check-answers");
 
-        this.logsButton = document.getElementById("show-logs");
-        this.logsSection = document.getElementById("logs");
-        this.logList = document.getElementById("log-list");
+        this.historyButton = document.getElementById("show-history");
+        this.historySection = document.getElementById("history");
+        this.historyList = document.getElementById("history-list");
     }
 
     _createClass(UI, [{
@@ -9714,7 +9714,7 @@ var UI = function () {
             this.questionList.innerHTML = html;
             this.questionsSection.style.display = "block";
             this.hideGeneratorSection();
-            this.hideLogsSection();
+            this.hideHistorySection();
         }
     }, {
         key: "showQuestionsWithAnswers",
@@ -9741,14 +9741,14 @@ var UI = function () {
             answers.push(tokens[1].trim());
         }
     }, {
-        key: "showLogs",
-        value: function showLogs(logs) {
+        key: "showHistory",
+        value: function showHistory(history) {
             var _this = this;
 
-            this.logList.innerHTML = logs.map(function (log) {
-                return "<tr>\n                    <td>" + new Date(log.date).toLocaleString() + "</td>\n                    <td class=\"date\" style=\"display: none;\">" + log.date + "</td>\n                    <td class=\"results\">" + _this.mapResults(log.results) + "</td>\n                </tr>";
+            this.historyList.innerHTML = history.map(function (history) {
+                return "<tr>\n                    <td>" + new Date(history.date).toLocaleString() + "</td>\n                    <td class=\"date\" style=\"display: none;\">" + history.date + "</td>\n                    <td class=\"results\">" + _this.mapResults(history.results) + "</td>\n                </tr>";
             }).join("\n");
-            this.logsSection.style.display = "block";
+            this.historySection.style.display = "block";
             this.hideGeneratorSection();
         }
     }, {
@@ -9817,9 +9817,9 @@ var UI = function () {
             this.generatorSection.style.display = "none";
         }
     }, {
-        key: "hideLogsSection",
-        value: function hideLogsSection() {
-            this.logsSection.style.display = "none";
+        key: "hideHistorySection",
+        value: function hideHistorySection() {
+            this.historySection.style.display = "none";
         }
     }, {
         key: "setDate",

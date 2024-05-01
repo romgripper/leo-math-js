@@ -18,9 +18,9 @@ class UI {
         this.questionsSection = document.getElementById("questions");
         this.checkAnswersButton = document.getElementById("check-answers");
 
-        this.logsButton = document.getElementById("show-logs");
-        this.logsSection = document.getElementById("logs");
-        this.logList = document.getElementById("log-list");
+        this.historyButton = document.getElementById("show-history");
+        this.historySection = document.getElementById("history");
+        this.historyList = document.getElementById("history-list");
     }
 
     init() {
@@ -61,7 +61,7 @@ class UI {
         this.questionList.innerHTML = html;
         this.questionsSection.style.display = "block";
         this.hideGeneratorSection();
-        this.hideLogsSection();
+        this.hideHistorySection();
     }
 
     showQuestionsWithAnswers(e) {
@@ -84,15 +84,15 @@ class UI {
         answers.push(tokens[1].trim());
     }
 
-    showLogs(logs) {
-        this.logList.innerHTML = logs.map(log =>
+    showHistory(history) {
+        this.historyList.innerHTML = history.map(history =>
                 `<tr>
-                    <td>${new Date(log.date).toLocaleString()}</td>
-                    <td class="date" style="display: none;">${log.date}</td>
-                    <td class="results">${this.mapResults(log.results)}</td>
+                    <td>${new Date(history.date).toLocaleString()}</td>
+                    <td class="date" style="display: none;">${history.date}</td>
+                    <td class="results">${this.mapResults(history.results)}</td>
                 </tr>`)
             .join("\n");
-        this.logsSection.style.display = "block";
+        this.historySection.style.display = "block";
         this.hideGeneratorSection();
     }
 
@@ -150,8 +150,8 @@ class UI {
         this.generatorSection.style.display = "none";
     }
 
-    hideLogsSection() {
-        this.logsSection.style.display = "none";
+    hideHistorySection() {
+        this.historySection.style.display = "none";
     }
 
     setDate(date) {

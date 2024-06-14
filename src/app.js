@@ -75,4 +75,7 @@ ui.multiplicationButton.addEventListener("click", (e) => generateAndShowQuestion
 ui.divisionButton.addEventListener("click", (e) => generateAndShowQuestions(e, DIVIDE));
 ui.checkAnswersButton.addEventListener("click", checkAnswers);
 ui.historyButton.addEventListener("click", showHistory);
-ui.historySection.addEventListener("click", e => ui.showQuestionsWithAnswers(e));
+ui.historySection.addEventListener("click", e => {
+    ui.showQuestionsWithAnswers(e);
+    checkAnswers();
+});

@@ -1,5 +1,5 @@
 function getRandomInt(max) {
-    return Math.ceil(Math.random() * max);
+    return max * 0.1 + Math.ceil(Math.random() * max * 0.9);
 }
 
 class Question {

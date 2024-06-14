@@ -9592,7 +9592,8 @@ _ui.ui.divisionButton.addEventListener("click", function (e) {
 _ui.ui.checkAnswersButton.addEventListener("click", checkAnswers);
 _ui.ui.historyButton.addEventListener("click", showHistory);
 _ui.ui.historySection.addEventListener("click", function (e) {
-    return _ui.ui.showQuestionsWithAnswers(e);
+    _ui.ui.showQuestionsWithAnswers(e);
+    checkAnswers();
 });
 
 /***/ }),
@@ -9818,7 +9819,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function getRandomInt(max) {
-    return Math.ceil(Math.random() * max);
+    return max * 0.1 + Math.ceil(Math.random() * max * 0.9);
 }
 
 var Question = function () {

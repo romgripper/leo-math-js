@@ -41,26 +41,23 @@ class UI {
         return +this.count.value;
     }
 
-    showQuestions(questions, answers, reminders, date) {
+    showQuestions(questions, answers, remainders, date) {
         if (!date) date = new Date();
         this.setDate(date);
 
-        if (!reminders) reminders = [];
+        if (!remainders) remainders = [];
 
         const isDivision = questions[0].includes(DIVIDE);
-        let html = "";
+        let html = '<div class="row">';
         for (let i = 0; i < questions.length; i++) {
-            if (i % 4 === 0) {
-                html += '</div><div class="row">';
-            }
             html += isDivision ?
                 `<div class="input-field col s2">
                     <input type="number" class="answer" id="answer${i}" value="${answers[i] || ''}">
                     <label class="question ${answers[i] && 'active'}" id="question${i}" for="answer${i}">${questions[i]}</label>
                 </div>
-                <div class="input-field col s1" style="padding-right: 20px">
-                    <input type="number" class="answer" id="reminder${i}" value="${reminders[i] || ''}">
-                    <label class="${reminders[i] && 'active'}" for="reminder${i}">...</label>
+                <div class="input-field col s2" style="padding-right: 40px">
+                    <input type="number" class="answer" id="remainder${i}" value="${remainders[i] || ''}">
+                    <label class="${remainders[i] && 'active'}" for="remainder${i}">Remainder</label>
                 </div>`
                 :
                 `<div class="input-field col s3">
@@ -68,10 +65,8 @@ class UI {
                     <label class="question ${answers[i] && 'active'}" id="question${i}" for="answer${i}">${questions[i]}</label>
                 </div>`;
         }
-        if (html.startsWith("</div>")) {
-            html = html.substring("</div>".length);
-            html += "</div>";
-        }
+        html += "</div>";
+
         this.questionList.innerHTML = html;
         this.questionsSection.style.display = "block";
         this.hideGeneratorSection();
@@ -86,20 +81,20 @@ class UI {
 
         const questions = [];
         const answers = [];
-        const reminders = [];
+        const remainders = [];
         const date = new Date(row.querySelector(".date").textContent);
         const self = this;
-        row.querySelectorAll("span").forEach(span => self.parseResult(span.textContent, questions, answers, reminders));
-        this.showQuestions(questions, answers, reminders, date);
+        row.querySelectorAll("span").forEach(span => self.parseResult(span.textContent, questions, answers, remainders));
+        this.showQuestions(questions, answers, remainders, date);
     }
 
-    parseResult(result, questions, answers, reminders) {
+    parseResult(result, questions, answers, remainders) {
         const tokens = result.split("=");
         questions.push(tokens[0].trim());
         if (tokens[1].includes("...")) {
             const answerTokens = tokens[1].split("...");
             answers.push(answerTokens[0].trim());
-            reminders.push(answerTokens[1].trim());
+            remainders.push(answerTokens[1].trim());
         } else {
             answers.push(tokens[1].trim());
         }
@@ -143,8 +138,8 @@ class UI {
         return document.querySelector("#answer" + index);
     }
 
-    getReminderElement(index) {
-        return document.querySelector("#reminder" + index);
+    getRemainderElement(index) {
+        return document.querySelector("#remainder" + index);
     }
 
     disableCheckAnswersButton() {

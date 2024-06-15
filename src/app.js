@@ -31,19 +31,19 @@ function checkAnswers() {
         const question = questionElement.textContent;
         const answer = answerElement.value;
         const isDivision = question.includes(DIVIDE);
-        const reminderElement = ui.getReminderElement(index);
-        let reminder;
+        const remainderElement = ui.getRemainderElement(index);
+        let remainder;
 
         result += question + " = " + answer;
 
         if (isDivision) {
-            reminder = reminderElement.value;
-            result += " ... " + reminder;
+            remainder = remainderElement.value;
+            result += " ... " + remainder;
         }
 
         let correct;
         if (isDivision) {
-            correct = eval( "(" + question.replaceAll(DIVIDE, "-" + reminder + ")/")) == answer;
+            correct = eval( "(" + question.replaceAll(DIVIDE, "-" + remainder + ")/")) == answer;
         } else {
             correct = eval(question.replaceAll(MULTIPLY, "*")) == answer;
         }
@@ -52,7 +52,7 @@ function checkAnswers() {
         if (correct) {
             answerElement.setAttribute("disabled", "");
             if (isDivision) {
-                reminderElement.setAttribute("disabled", "");
+                remainderElement.setAttribute("disabled", "");
             }
             correctCount++;
         } else if (firstWrongAnswer) {

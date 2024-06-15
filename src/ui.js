@@ -51,16 +51,16 @@ class UI {
         let html = '<div class="row">';
         for (let i = 0; i < questions.length; i++) {
             html += isDivision ?
-                `<div class="input-field col s2">
+                `<div class="input-field col s3 m2">
                     <input type="number" class="answer" id="answer${i}" value="${answers[i] || ''}">
                     <label class="question ${answers[i] && 'active'}" id="question${i}" for="answer${i}">${questions[i]}</label>
                 </div>
-                <div class="input-field col s2" style="padding-right: 40px">
+                <div class="input-field col s3 m2" style="padding-right: 40px">
                     <input type="number" class="answer" id="remainder${i}" value="${remainders[i] || ''}">
                     <label class="${remainders[i] && 'active'}" for="remainder${i}">Remainder</label>
                 </div>`
                 :
-                `<div class="input-field col s3">
+                `<div class="input-field col s4 m3">
                     <input type="number" class="answer" id="answer${i}" value="${answers[i] || ''}">
                     <label class="question ${answers[i] && 'active'}" id="question${i}" for="answer${i}">${questions[i]}</label>
                 </div>`;

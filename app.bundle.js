@@ -9592,19 +9592,19 @@ function checkAnswers() {
         var question = questionElement.textContent;
         var answer = answerElement.value;
         var isDivision = question.includes(_question.DIVIDE);
-        var reminderElement = _ui.ui.getReminderElement(index);
-        var reminder = void 0;
+        var remainderElement = _ui.ui.getRemainderElement(index);
+        var remainder = void 0;
 
         result += question + " = " + answer;
 
         if (isDivision) {
-            reminder = reminderElement.value;
-            result += " ... " + reminder;
+            remainder = remainderElement.value;
+            result += " ... " + remainder;
         }
 
         var correct = void 0;
         if (isDivision) {
-            correct = eval("(" + question.replaceAll(_question.DIVIDE, "-" + reminder + ")/")) == answer;
+            correct = eval("(" + question.replaceAll(_question.DIVIDE, "-" + remainder + ")/")) == answer;
         } else {
             correct = eval(question.replaceAll(_question.MULTIPLY, "*")) == answer;
         }
@@ -9613,7 +9613,7 @@ function checkAnswers() {
         if (correct) {
             answerElement.setAttribute("disabled", "");
             if (isDivision) {
-                reminderElement.setAttribute("disabled", "");
+                remainderElement.setAttribute("disabled", "");
             }
             correctCount++;
         } else if (firstWrongAnswer) {
@@ -9735,24 +9735,19 @@ var UI = function () {
         }
     }, {
         key: "showQuestions",
-        value: function showQuestions(questions, answers, reminders, date) {
+        value: function showQuestions(questions, answers, remainders, date) {
             if (!date) date = new Date();
             this.setDate(date);
 
-            if (!reminders) reminders = [];
+            if (!remainders) remainders = [];
 
             var isDivision = questions[0].includes(_question.DIVIDE);
-            var html = "";
+            var html = '<div class="row">';
             for (var i = 0; i < questions.length; i++) {
-                if (i % 4 === 0) {
-                    html += '</div><div class="row">';
-                }
-                html += isDivision ? "<div class=\"input-field col s2\">\n                    <input type=\"number\" class=\"answer\" id=\"answer" + i + "\" value=\"" + (answers[i] || '') + "\">\n                    <label class=\"question " + (answers[i] && 'active') + "\" id=\"question" + i + "\" for=\"answer" + i + "\">" + questions[i] + "</label>\n                </div>\n                <div class=\"input-field col s1\" style=\"padding-right: 20px\">\n                    <input type=\"number\" class=\"answer\" id=\"reminder" + i + "\" value=\"" + (reminders[i] || '') + "\">\n                    <label class=\"" + (reminders[i] && 'active') + "\" for=\"reminder" + i + "\">...</label>\n                </div>" : "<div class=\"input-field col s3\">\n                    <input type=\"number\" class=\"answer\" id=\"answer" + i + "\" value=\"" + (answers[i] || '') + "\">\n                    <label class=\"question " + (answers[i] && 'active') + "\" id=\"question" + i + "\" for=\"answer" + i + "\">" + questions[i] + "</label>\n                </div>";
+                html += isDivision ? "<div class=\"input-field col s2\">\n                    <input type=\"number\" class=\"answer\" id=\"answer" + i + "\" value=\"" + (answers[i] || '') + "\">\n                    <label class=\"question " + (answers[i] && 'active') + "\" id=\"question" + i + "\" for=\"answer" + i + "\">" + questions[i] + "</label>\n                </div>\n                <div class=\"input-field col s2\" style=\"padding-right: 40px\">\n                    <input type=\"number\" class=\"answer\" id=\"remainder" + i + "\" value=\"" + (remainders[i] || '') + "\">\n                    <label class=\"" + (remainders[i] && 'active') + "\" for=\"remainder" + i + "\">Remainder</label>\n                </div>" : "<div class=\"input-field col s3\">\n                    <input type=\"number\" class=\"answer\" id=\"answer" + i + "\" value=\"" + (answers[i] || '') + "\">\n                    <label class=\"question " + (answers[i] && 'active') + "\" id=\"question" + i + "\" for=\"answer" + i + "\">" + questions[i] + "</label>\n                </div>";
             }
-            if (html.startsWith("</div>")) {
-                html = html.substring("</div>".length);
-                html += "</div>";
-            }
+            html += "</div>";
+
             this.questionList.innerHTML = html;
             this.questionsSection.style.display = "block";
             this.hideGeneratorSection();
@@ -9768,23 +9763,23 @@ var UI = function () {
 
             var questions = [];
             var answers = [];
-            var reminders = [];
+            var remainders = [];
             var date = new Date(row.querySelector(".date").textContent);
             var self = this;
             row.querySelectorAll("span").forEach(function (span) {
-                return self.parseResult(span.textContent, questions, answers, reminders);
+                return self.parseResult(span.textContent, questions, answers, remainders);
             });
-            this.showQuestions(questions, answers, reminders, date);
+            this.showQuestions(questions, answers, remainders, date);
         }
     }, {
         key: "parseResult",
-        value: function parseResult(result, questions, answers, reminders) {
+        value: function parseResult(result, questions, answers, remainders) {
             var tokens = result.split("=");
             questions.push(tokens[0].trim());
             if (tokens[1].includes("...")) {
                 var answerTokens = tokens[1].split("...");
                 answers.push(answerTokens[0].trim());
-                reminders.push(answerTokens[1].trim());
+                remainders.push(answerTokens[1].trim());
             } else {
                 answers.push(tokens[1].trim());
             }
@@ -9832,9 +9827,9 @@ var UI = function () {
             return document.querySelector("#answer" + index);
         }
     }, {
-        key: "getReminderElement",
-        value: function getReminderElement(index) {
-            return document.querySelector("#reminder" + index);
+        key: "getRemainderElement",
+        value: function getRemainderElement(index) {
+            return document.querySelector("#remainder" + index);
         }
     }, {
         key: "disableCheckAnswersButton",

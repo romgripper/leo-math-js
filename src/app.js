@@ -30,13 +30,30 @@ function checkAnswers() {
 
         const question = questionElement.textContent;
         const answer = answerElement.value;
+        const isDivision = question.includes(DIVIDE);
+        const reminderElement = ui.getReminderElement(index);
+        let reminder;
+
         result += question + " = " + answer;
 
-        const correct = eval(question.replaceAll(DIVIDE, "/").replaceAll(MULTIPLY, "*")) == answer;
+        if (isDivision) {
+            reminder = reminderElement.value;
+            result += " ... " + reminder;
+        }
+
+        let correct;
+        if (isDivision) {
+            correct = eval( "(" + question.replaceAll(DIVIDE, "-" + reminder + ")/")) == answer;
+        } else {
+            correct = eval(question.replaceAll(MULTIPLY, "*")) == answer;
+        }
         result += ";" + correct + ",";
 
         if (correct) {
             answerElement.setAttribute("disabled", "");
+            if (isDivision) {
+                reminderElement.setAttribute("disabled", "");
+            }
             correctCount++;
         } else if (firstWrongAnswer) {
             answerElement.focus();

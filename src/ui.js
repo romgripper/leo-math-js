@@ -1,3 +1,5 @@
+import { DIVIDE } from "./question";
+
 class UI {
     constructor() {
         this.dateElement = document.getElementById("date");
@@ -39,16 +41,28 @@ class UI {
         return +this.count.value;
     }
 
-    showQuestions(questions, answers, date) {
+    showQuestions(questions, answers, reminders, date) {
         if (!date) date = new Date();
         this.setDate(date);
 
+        if (!reminders) reminders = [];
+
+        const isDivision = questions[0].includes(DIVIDE);
         let html = "";
         for (let i = 0; i < questions.length; i++) {
             if (i % 4 === 0) {
                 html += '</div><div class="row">';
             }
-            html +=
+            html += isDivision ?
+                `<div class="input-field col s2">
+                    <input type="number" class="answer" id="answer${i}" value="${answers[i] || ''}">
+                    <label class="question ${answers[i] && 'active'}" id="question${i}" for="answer${i}">${questions[i]}</label>
+                </div>
+                <div class="input-field col s1" style="padding-right: 20px">
+                    <input type="number" class="answer" id="reminder${i}" value="${reminders[i] || ''}">
+                    <label class="${reminders[i] && 'active'}" for="reminder${i}">...</label>
+                </div>`
+                :
                 `<div class="input-field col s3">
                     <input type="number" class="answer" id="answer${i}" value="${answers[i] || ''}">
                     <label class="question ${answers[i] && 'active'}" id="question${i}" for="answer${i}">${questions[i]}</label>
@@ -72,16 +86,23 @@ class UI {
 
         const questions = [];
         const answers = [];
+        const reminders = [];
         const date = new Date(row.querySelector(".date").textContent);
         const self = this;
-        row.querySelectorAll("span").forEach(span => self.parseResult(span.textContent, questions, answers));
-        this.showQuestions(questions, answers, date);
+        row.querySelectorAll("span").forEach(span => self.parseResult(span.textContent, questions, answers, reminders));
+        this.showQuestions(questions, answers, reminders, date);
     }
 
-    parseResult(result, questions, answers) {
+    parseResult(result, questions, answers, reminders) {
         const tokens = result.split("=");
         questions.push(tokens[0].trim());
-        answers.push(tokens[1].trim());
+        if (tokens[1].includes("...")) {
+            const answerTokens = tokens[1].split("...");
+            answers.push(answerTokens[0].trim());
+            reminders.push(answerTokens[1].trim());
+        } else {
+            answers.push(tokens[1].trim());
+        }
     }
 
     showHistory(history) {
@@ -120,6 +141,10 @@ class UI {
 
     getAnswerElement(index) {
         return document.querySelector("#answer" + index);
+    }
+
+    getReminderElement(index) {
+        return document.querySelector("#reminder" + index);
     }
 
     disableCheckAnswersButton() {

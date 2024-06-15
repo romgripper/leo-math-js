@@ -1,5 +1,7 @@
 function getRandomInt(max) {
-    return max * 0.1 + Math.ceil(Math.random() * max * 0.9);
+    let random;
+    while ((random = Math.ceil(max * (0.1 + Math.random() * 0.9) - 1)) === 0);
+    return random;
 }
 
 class Question {
@@ -13,9 +15,6 @@ class Question {
                 const temp = operand1;
                 operand1 = operand2;
                 operand2 = temp;
-            }
-            if (operator === DIVIDE) {
-                operand1 = Math.floor(operand1 / operand2) * operand2;
             }
             questions.push(`${operand1} ${operator} ${operand2}`);
         }

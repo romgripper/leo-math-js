@@ -37,13 +37,14 @@ function checkAnswers() {
         result += question + " = " + answer;
 
         if (isDivision) {
-            remainder = remainderElement.value;
+            remainder = remainderElement.value || 0;
             result += " ... " + remainder;
         }
 
         let correct;
         if (isDivision) {
             correct = eval( "(" + question.replaceAll(DIVIDE, "-" + remainder + ")/")) == answer;
+            correct = correct && remainder < question.substring(question.indexOf(DIVIDE) + 1);
         } else {
             correct = eval(question.replaceAll(MULTIPLY, "*")) == answer;
         }

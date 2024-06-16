@@ -9598,13 +9598,14 @@ function checkAnswers() {
         result += question + " = " + answer;
 
         if (isDivision) {
-            remainder = remainderElement.value;
+            remainder = remainderElement.value || 0;
             result += " ... " + remainder;
         }
 
         var correct = void 0;
         if (isDivision) {
             correct = eval("(" + question.replaceAll(_question.DIVIDE, "-" + remainder + ")/")) == answer;
+            correct = correct && remainder < question.substring(question.indexOf(_question.DIVIDE) + 1);
         } else {
             correct = eval(question.replaceAll(_question.MULTIPLY, "*")) == answer;
         }

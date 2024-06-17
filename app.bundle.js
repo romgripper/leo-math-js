@@ -9605,7 +9605,7 @@ function checkAnswers() {
         var correct = void 0;
         if (isDivision) {
             correct = eval("(" + question.replaceAll(_question.DIVIDE, "-" + remainder + ")/")) == answer;
-            correct = correct && remainder < question.substring(question.indexOf(_question.DIVIDE) + 1);
+            correct = correct && remainder < question.substring(question.indexOf(_question.DIVIDE) + 1).trim();
         } else {
             correct = eval(question.replaceAll(_question.MULTIPLY, "*")) == answer;
         }

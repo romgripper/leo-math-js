@@ -44,7 +44,7 @@ function checkAnswers() {
         let correct;
         if (isDivision) {
             correct = eval( "(" + question.replaceAll(DIVIDE, "-" + remainder + ")/")) == answer;
-            correct = correct && remainder < question.substring(question.indexOf(DIVIDE) + 1);
+            correct = correct && remainder < question.substring(question.indexOf(DIVIDE) + 1).trim();
         } else {
             correct = eval(question.replaceAll(MULTIPLY, "*")) == answer;
         }

@@ -38,13 +38,13 @@ function checkAnswers() {
 
         if (isDivision) {
             remainder = remainderElement.value || 0;
-            result += " ... " + remainder;
+            result += " ... " + remainderElement.value;
         }
 
         let correct;
         if (isDivision) {
-            correct = eval( "(" + question.replaceAll(DIVIDE, "-" + remainder + ")/")) == answer;
-            correct = correct && remainder < question.substring(question.indexOf(DIVIDE) + 1).trim();
+            correct = eval( "(" + question.replaceAll(DIVIDE, "-" + remainder + ")/")) === Number(answer);
+            correct = correct && Number(remainder) < Number(question.substring(question.indexOf(DIVIDE) + 1).trim());
         } else {
             correct = eval(question.replaceAll(MULTIPLY, "*")) == answer;
         }

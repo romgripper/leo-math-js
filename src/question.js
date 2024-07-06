@@ -11,7 +11,7 @@ class Question {
             let operand1 = getRandomInt(maxOperand1);
             let operand2 = getRandomInt(maxOperand2);
 
-            if ((operator === MINUS || operator === DIVIDE) && operand1 < operand2) {
+            if (operator === DIVIDE && operand1 < operand2) {
                 const temp = operand1;
                 operand1 = operand2;
                 operand2 = temp;

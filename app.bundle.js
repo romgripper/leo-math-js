@@ -3959,7 +3959,7 @@ var Question = function () {
                 var operand1 = getRandomInt(maxOperand1);
                 var operand2 = getRandomInt(maxOperand2);
 
-                if ((operator === MINUS || operator === DIVIDE) && operand1 < operand2) {
+                if (operator === DIVIDE && operand1 < operand2) {
                     var temp = operand1;
                     operand1 = operand2;
                     operand2 = temp;
